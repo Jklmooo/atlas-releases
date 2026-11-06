@@ -1,0 +1,22 @@
+# Fiche de sortie, posée dans ~/.atlas/sorties/ par l'installation depuis Réglages, Modules.
+nom = "Voix"
+description = "Atlas lit ses réponses à voix haute. Une demande de ta part, écrite ou dite, coupe sa voix."
+parle = true                # elle parle : le bouton haut-parleur du réacteur l'allume ou l'éteint
+commande = "uv"
+arguments = ["run", "--project", "{dossier}", "atlas-voix"]
+
+[[reglages]]
+cle = "moteur"
+libelle = "Moteur de voix"
+aide = "say : la voix d'Apple, déjà sur le Mac. Piper : des voix locales qui marchent aussi sous Linux et Windows. Voxtral (Mistral) : voix plus naturelles, Mac à puce Apple seulement, plus lourdes."
+defaut = "say"
+commande_valeurs = ["uv", "run", "--project", "{dossier}", "atlas-voix", "--moteurs-liste"]
+
+[[reglages]]
+cle = "voix"
+libelle = "Voix"
+aide = "La voix qui lit les réponses, pour le moteur choisi."
+defaut = "Aurélie (Enhanced)"
+commande_valeurs = ["uv", "run", "--project", "{dossier}", "atlas-voix", "--voix-liste"]
+commande_installer = ["uv", "run", "--project", "{dossier}", "atlas-voix", "--installer-voix", "{valeur}"]
+commande_supprimer = ["uv", "run", "--project", "{dossier}", "atlas-voix", "--supprimer-voix", "{valeur}"]

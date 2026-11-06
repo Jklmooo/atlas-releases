@@ -1,0 +1,14 @@
+# Fiche du module « pastille » : ce que le socle lit avant d'installer (J10).
+nom = "Pastille"
+description = "Un orbe flottant qui scintille, comme celui de Siri : quand la fenêtre d'Atlas est fermée ou derrière, il montre qu'Atlas écoute, réfléchit ou parle, et peut afficher ta demande et sa réponse."
+version = "0.4.0"
+socle = ">=0.0.1"           # demande un cœur qui lit `recoit` et `peut` (CONTRAT.md)
+plateformes = ["macos"]     # AppKit : une fenêtre flottante qui ne prend pas le focus
+programmes = ["swiftc"]     # les outils de développement d'Apple (xcode-select --install)
+preparation = ["swiftc", "-O", "-swift-version", "5", "-o", "{dossier}/pastille", "{dossier}/Pastille.swift"]   # compilée une fois le module copié
+
+# Une sortie qui ne parle pas : le cœur la lance quand elle est allumée et l'arrête avec lui. Tout passe par son
+# entrée et sa sortie : l'état et les demandes que sa fiche demande à voir, les gestes qu'elle déclare.
+[[fiches]]
+fichier = "fiches/pastille.toml"
+dossier = "sorties"

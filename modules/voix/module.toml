@@ -1,0 +1,20 @@
+# Fiche du module « voix » : ce que le socle lit avant d'installer (J10). Un dépôt contient plusieurs modules, chacun
+# dans son dossier avec cette fiche.
+nom = "Voix"
+description = "Parle à Atlas à voix haute et entends ses réponses : écoute avec mot d'éveil, et voix."
+version = "0.9.0"
+socle = ">=0.0.1"           # version d'Atlas demandée
+plateformes = ["macos", "windows"]   # là où le module marche (pyproject.toml : openwakeword n'a pas de paquet Linux) ; Linux au J12
+programmes = ["uv"]         # Atlas le télécharge (avec ton accord) s'il manque ; `say` et `afplay` seulement pour le moteur Mac
+preparation = ["uv", "sync", "--project", "{dossier}"]   # lancé une fois le module copié : prépare son Python
+telechargements = ["le modèle du mot d'éveil « Hey Jarvis » (≈ 10 Mo)"]   # dit avant l'installation, en plus de uv et des paquets Python
+etapes = [["uv", "run", "--project", "{dossier}", "atlas-ecoute", "--telecharger-eveil"]]   # lancées après la préparation
+
+# Les fiches que le cœur lit : une entrée (Écoute) et une sortie (Voix), activées et réglées séparément.
+# Le Python et ses paquets vivent dans l'environnement `uv` de ce dossier.
+[[fiches]]
+fichier = "fiches/ecoute.toml"
+dossier = "entrees"
+[[fiches]]
+fichier = "fiches/voix.toml"
+dossier = "sorties"
