@@ -1,0 +1,24 @@
+# Fiche d'entrée, posée dans ~/.atlas/entrees/ par l'installation depuis Réglages, Modules.
+nom = "Écoute"
+description = "Atlas t'écoute : dis « Hey Jarvis » (le mot « Hey Atlas » demandera d'entraîner un modèle), puis ta demande, et il te répond. Éteinte, le micro est libéré."
+genre = "personne"          # ce qu'elle dit vaut une demande de la personne
+micro = true                # elle prend le micro : le bouton micro du réacteur l'allume ou l'éteint
+vocabulaire = true          # elle reçoit les noms des outils d'Atlas : Whisper les reconnaît mieux (« Seedbox », pas « Cinebox »)
+commande = "uv"
+arguments = ["run", "--project", "{dossier}", "atlas-ecoute"]
+
+[[reglages]]
+cle = "modele"
+libelle = "Modèle de transcription"
+aide = "Il transforme ta voix en texte, sur cet ordinateur. Un modèle Whisper plus gros comprend mieux, mais répond plus lentement. Sur un Mac à puce Apple, Parakeet est bien plus rapide."
+defaut = "small"
+commande_valeurs = ["uv", "run", "--project", "{dossier}", "atlas-ecoute", "--modeles-liste"]
+commande_installer = ["uv", "run", "--project", "{dossier}", "atlas-ecoute", "--installer-modele", "{valeur}"]
+commande_supprimer = ["uv", "run", "--project", "{dossier}", "atlas-ecoute", "--supprimer-modele", "{valeur}"]
+
+[[reglages]]
+cle = "micro"
+libelle = "Micro"
+aide = "Le micro qui t'écoute. Par défaut, celui du système ; s'il est muet, Atlas essaie celui du MacBook, et le dit si aucun ne donne de son."
+defaut = ""
+commande_valeurs = ["uv", "run", "--project", "{dossier}", "atlas-ecoute", "--micros-liste"]

@@ -1,0 +1,27 @@
+# Fiche de sortie, posée dans ~/.atlas/sorties/ par l'installation depuis Réglages, Modules.
+nom = "Pastille"
+description = "Quand la fenêtre d'Atlas est fermée ou derrière une autre, un orbe en haut de l'écran scintille : bleu quand il t'écoute, violet quand il réfléchit, doré quand il parle, puis s'efface. Un clic coupe sa voix ; sinon, il rouvre la fenêtre."
+commande = "{dossier}/pastille"
+recoit = ["etat", "demande"]     # voir quand Atlas écoute, réfléchit ou parle (et si sa fenêtre est devant), et chaque demande
+peut = ["couper", "montrer"]     # un clic coupe sa voix, ou remet sa fenêtre devant
+
+[[reglages]]
+cle = "place"
+libelle = "Place"
+aide = "Où la pastille apparaît sur l'écran principal."
+defaut = "haut-droite"
+valeurs = [
+  { valeur = "haut-droite", libelle = "En haut à droite" },
+  { valeur = "haut-centre", libelle = "En haut au centre" },
+  { valeur = "bas-droite", libelle = "En bas à droite" },
+]
+
+[[reglages]]
+cle = "transcription"
+libelle = "Transcription"
+aide = "À côté de l'orbe, ta demande telle qu'Atlas l'a comprise, puis sa réponse qui s'écrit. Sans elle, l'orbe seul."
+defaut = "oui"
+valeurs = [
+  { valeur = "oui", libelle = "Afficher la demande et la réponse" },
+  { valeur = "non", libelle = "L'orbe seul" },
+]
