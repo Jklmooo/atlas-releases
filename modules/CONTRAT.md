@@ -44,8 +44,17 @@ secret dans un module : ni clé, ni jeton. Ce qui dépend de la personne se dema
 | `preparation` | une commande lancée une fois le module copié (`["uv", "sync"]`, une compilation) |
 | `etapes` | d'autres commandes, lancées ensuite dans l'ordre |
 | `[[fiches]]` | `fichier` (chemin dans le module) et `dossier` (`"entrees"` ou `"sorties"`) |
+| `[[options]]` | des parties au choix (un moteur…) : `id`, `nom`, `description`, `taille` (ce qu'elle prend sur le disque, « 60 Mo »), `plateformes`, `coche` (proposée cochée), `arguments` |
+| `[paquet]` | la forme publiée, sans le code : `construction` (le script qui construit le paquet), et `programmes`, `preparation`, `etapes` quand ils changent une fois compilé |
 
-Dans les commandes, `{dossier}` est remplacé par le dossier où le module est installé. L'installation copie le
+Dans les commandes, `{dossier}` est remplacé par le dossier où le module est installé, et `{options}` (seul) par les
+`arguments` des options cochées. La personne coche les options à l'installation, avec leur taille ; son choix est
+gardé pour les mises à jour et se change sur la fiche du module.
+
+Un module avec `[paquet]` se publie sans son code : `scripts/publier.sh` lance `construction <dossier de sortie>` et
+joint le résultat à la version, en `<id>-<système>-<processeur>.zip` (`voix-macos-aarch64.zip`) ; le dépôt public ne
+garde que `module.toml`, `fiches/` et `README.md`. Installé depuis la publication, Atlas télécharge le paquet de cet
+ordinateur (empreinte vérifiée) à la place du code. Depuis un dossier, le module s'installe depuis son code, comme avant. L'installation copie le
 module dans `~/.atlas/modules/<id>/` (sans `.git`, `.venv`, `node_modules`…), pose ses fiches, puis lance la
 préparation. Une installation coupée en route se reprend d'un clic. Une mise à jour remplace tout le module, et une
 fiche que la nouvelle version n'a plus disparaît.
@@ -192,7 +201,7 @@ arguments = ["{dossier}/journal.py"]
 
 ## 7. Essayer
 
-- Pendant le développement, Atlas lit le dossier `atlas-modules` posé à côté de son dépôt. Sinon, la personne donne
+- Pendant le développement, Atlas lit le dossier `modules/` de son dépôt. Sinon, la personne donne
   un dossier ou une adresse git dans Réglages, Modules, Catalogue.
 - Installer, puis allumer la fiche dans la page du module. Ce que le module dit de son arrêt (`{"erreur"}`)
   s'affiche sur cette page.

@@ -2,7 +2,7 @@
 nom = "Pastille"
 description = "Un orbe flottant qui scintille, comme celui de Siri : quand la fenêtre d'Atlas est fermée ou derrière, il montre qu'Atlas écoute, réfléchit ou parle, et peut afficher ta demande et sa réponse."
 version = "0.4.0"
-socle = ">=0.0.1"           # demande un cœur qui lit `recoit` et `peut` (CONTRAT.md)
+socle = ">=0.1.2"           # la première version qui installe les paquets compilés (et lit `recoit` et `peut`)
 plateformes = ["macos"]     # AppKit : une fenêtre flottante qui ne prend pas le focus
 programmes = ["swiftc"]     # les outils de développement d'Apple (xcode-select --install)
 preparation = ["swiftc", "-O", "-swift-version", "5", "-o", "{dossier}/pastille", "{dossier}/Pastille.swift"]   # compilée une fois le module copié
@@ -12,3 +12,10 @@ preparation = ["swiftc", "-O", "-swift-version", "5", "-o", "{dossier}/pastille"
 [[fiches]]
 fichier = "fiches/pastille.toml"
 dossier = "sorties"
+
+# La version publiée n'a pas le code : scripts/publier.sh lance construire.sh et joint la pastille compilée à la
+# version. Installée ainsi, elle n'a besoin ni de swiftc ni de rien compiler.
+[paquet]
+construction = "construire.sh"
+programmes = []
+preparation = []
