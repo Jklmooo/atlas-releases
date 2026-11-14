@@ -1,20 +1,34 @@
 # Voix
 
-Deux modules d'Atlas, un seul dossier, un seul environnement Python (`uv`) :
+Le module Voix d'Atlas propose deux fiches exclusives.
 
-- **Écoute** (entrée, `fiches/ecoute.toml`) : mot d'éveil « Hey Jarvis » (openWakeWord), parole détectée, transcription locale
-  faster-whisper, ou Parakeet (MLX) sur un Mac à puce Apple. Ce qu'elle dit vaut une demande de la personne. Le bouton micro du réacteur l'arrête vraiment.
-- **Voix** (sortie, `fiches/voix.toml`) : Atlas lit ses réponses à voix haute (`say` sur Mac ; Piper, voix locales portables ; Voxtral de Mistral sur un Mac à puce Apple, plus naturelle mais lente sur 8 Go). Le bouton voix du réacteur la coupe.
+- **Conversation** (`fiches/conversation.toml`) utilise Pipecat pour écouter, envoyer la demande au socle et dire
+  sa réponse phrase par phrase.
+- **Agent vocal** (`fiches/agent_vocal.toml`) utilise l'agent vocal de Mistral avec les outils d'Atlas par la porte
+  MCP. Il s'utilise avec le micro du Mac. L'appel du téléphone reste à faire pour cette fiche.
 
-Installation : Réglages, Modules, Catalogue, « Installer ». Si `uv` manque, Atlas propose de le télécharger (35 Mo, site officiel,
-empreinte vérifiée). L'installation télécharge aussi le modèle du mot d'éveil (10 Mo). Le module s'installe sans rien allumer :
-sa fiche (clic sur « Voix » dans Modules) a un bouton par entrée et par sortie, qui suit les boutons micro et haut-parleur du réacteur.
-Les modèles de transcription déjà dans le cache Hugging Face sont trouvés seuls, comme Ollama liste les siens ; chacun dit son
-moteur (Whisper partout, Parakeet seulement sur un Mac à puce Apple). Un modèle ou une voix Piper absents se choisissent, puis s'installent d'un clic, avec leur taille et leur avancement ;
-rien ne se télécharge sans ce clic.
+## Conversation
 
-Les moteurs se cochent à l'installation, avec ce que chacun prend sur le disque (l'écoute seule : 230 Mo) : Whisper (60 Mo)
-et Piper (50 Mo) cochés, Parakeet (390 Mo) et Voxtral (410 Mo) sur un Mac à puce Apple. Ils se changent ensuite sur la fiche du
-module. Publié, le module n'a pas son code : un paquet compilé (`construire.sh`) est joint à la version d'Atlas.
+- Mot d'éveil « Hey Jarvis » (openWakeWord), mots d'arrêt, filtre des phrases que Whisper invente sur du silence.
+- Transcription (STT) au choix : Whisper (dans la base), Whisper MLX ou Parakeet sur un Mac à puce Apple, ou Voxtral 3 en direct
+  (en ligne, Mistral). Voix (TTS) au choix : voix d'Apple, Piper, Kokoro, Voxtral local (puce Apple, 16 Go de mémoire au moins) ou Voxtral 3 en direct, dont le réglage Ton (chaleureux, enjoué…) passe par les balises d’émotion de Mistral.
+- Une voix qui parle coupe Atlas aussitôt, et le cœur ne garde que ce qui a été dit.
+- Sur le Mac, le micro passe par l'annuleur d'écho de WebRTC (la voix d'Atlas en est retirée) ; le téléphone l'appelle
+  depuis la page d'Atlas (bouton micro, WebRTC, adresse en https de Tailscale).
 
-Mac et Windows pour l'instant ; Linux au J12 (openWakeWord y demande `tflite-runtime`).
+Les clés des moteurs en ligne (Mistral) viennent du cœur, qui les garde pour le modèle du même service : le module ne lit
+jamais `secrets.toml`.
+
+Installation : Réglages, Modules, Catalogue, « Installer ». Si `uv` manque, Atlas propose de le télécharger (35 Mo, site
+officiel, empreinte vérifiée). La base prend 580 Mo (mot d'éveil, Whisper, Pipecat), plus le modèle du mot d'éveil
+(10 Mo). Le module s'installe avec ses deux fiches éteintes. Dans Modules, ouvre « Voix » pour choisir celle à utiliser.
+
+Rien ne se coche à l'installation : chaque liste (transcription, voix, locuteur) montre tout ce qui peut marcher sur cet
+ordinateur. Ce qui est déjà là est trouvé seul (les modèles du cache Hugging Face, comme Ollama liste les siens) ; le
+reste s'installe d'un clic depuis « Gérer », avec sa taille, moteur compris (Parakeet : 390 Mo, plus son modèle de
+1,2 Go), et son avancement. Un modèle ou une voix Piper à soi s'ajoute aussi, par son dépôt Hugging Face (champ « Autre »), ou se trouve seul s'il est déjà dans le cache. Rien ne se télécharge sans ce clic. Un moteur installé ainsi est gardé par le cœur
+(`.options.toml`, options cachées de `module.toml`) et revient aux mises à jour.
+
+Publié, le module n'a pas son code : un paquet compilé (`construire.sh`) est joint à la version d'Atlas.
+
+Le module a été essayé sur Mac. La capture du micro sous Windows reste à porter.

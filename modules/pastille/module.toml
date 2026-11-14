@@ -1,4 +1,4 @@
-# Fiche du module « pastille » : ce que le socle lit avant d'installer (J10).
+# Fiche du module « pastille » : ce que le socle lit avant d'installer.
 nom = "Pastille"
 description = "Un orbe flottant qui scintille, comme celui de Siri : quand la fenêtre d'Atlas est fermée ou derrière, il montre qu'Atlas écoute, réfléchit ou parle, et peut afficher ta demande et sa réponse."
 version = "0.4.0"

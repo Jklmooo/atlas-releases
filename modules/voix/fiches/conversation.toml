@@ -1,0 +1,84 @@
+# Fiche d'entrée et de sortie à la fois, posée dans ~/.atlas/entrees/ par l'installation depuis Réglages, Modules.
+nom = "Conversation"
+description = "Parle avec Atlas, sur ce Mac et depuis le téléphone : dis « Hey Jarvis », puis ta demande ; il répond à voix haute, et tu peux lui couper la parole. Éteinte, le micro est libéré."
+genre = "personne"          # ce qu'elle dit vaut une demande de la personne
+micro = true                # elle prend le micro : le bouton micro du réacteur ouvre ou ferme son micro
+parle = true                # elle parle : le bouton haut-parleur du réacteur ouvre ou ferme sa voix
+sortie = true               # un seul programme : il envoie la demande et dit la réponse, phrase par phrase
+vocabulaire = true          # les noms des outils d'Atlas : Whisper les reconnaît mieux
+cles = ["mistral"]          # Voxtral en ligne : la clé Mistral d'Atlas, passée par le cœur
+recoit = ["appareil"]
+seule = "voix"              # ne tourne pas avec l'Agent vocal : en allumer une éteint l'autre       # le micro et le haut-parleur du téléphone, par la page d'Atlas (WebRTC)
+commande = "uv"
+arguments = ["run", "--project", "{dossier}", "atlas-conversation"]
+
+[[reglages]]
+cle = "modele"
+libelle = "Transcription (STT)"
+aide = "Elle transforme ta voix en texte. Sur cet ordinateur : Whisper, Whisper MLX ou Parakeet (puce Apple, plus rapides). En ligne : Voxtral 3 en direct, plus rapide encore, qui sent la fin de ta phrase ; ta voix part chez Mistral pendant que tu parles."
+defaut = "small"
+commande_valeurs = ["uv", "run", "--project", "{dossier}", "atlas-ecoute", "--modeles-liste"]
+commande_installer = ["uv", "run", "--project", "{dossier}", "atlas-ecoute", "--installer-modele", "{valeur}"]
+commande_supprimer = ["uv", "run", "--project", "{dossier}", "atlas-ecoute", "--supprimer-modele", "{valeur}"]
+libre = "ton modèle : son dépôt Hugging Face, auteur/nom"
+
+[[reglages]]
+cle = "langue"
+libelle = "Langue"
+aide = "La langue dans laquelle tu parles à Atlas. Whisper et Voxtral écoutent dans cette langue ; Parakeet reconnaît seul la langue parlée. « Arrête » et « Stop » marchent dans les deux langues."
+defaut = "fr"
+valeurs = [
+  { valeur = "fr", libelle = "Français" },
+  { valeur = "en", libelle = "Anglais" },
+]
+
+[[reglages]]
+cle = "fin"
+libelle = "Fin de ta phrase"
+aide = "Avec une transcription sur cet ordinateur : après un silence d'une seconde, ou jugée par smart-turn (plus tôt quand la phrase est finie, plus tard quand tu cherches tes mots). Voxtral en direct la juge lui-même."
+defaut = "silence"
+valeurs = [
+  { valeur = "silence", libelle = "Après un silence" },
+  { valeur = "smart-turn", libelle = "Smart-turn (au son de ta voix)" },
+]
+
+[[reglages]]
+cle = "moteur"
+libelle = "Voix (TTS)"
+aide = "Le moteur qui lit les réponses à voix haute. say : la voix d'Apple, déjà sur le Mac. Piper : des voix locales, les plus rapides. Kokoro : locales, plus naturelles, un peu plus lentes à démarrer (0,7 s par phrase). Voxtral (Mistral) : plus naturelles, sur un Mac à puce Apple de 16 Go au moins. Voxtral 3 en ligne : la plus rapide et naturelle ; le texte dit part chez Mistral."
+defaut = "say"
+commande_valeurs = ["uv", "run", "--project", "{dossier}", "atlas-voix", "--moteurs-liste"]
+commande_installer = ["uv", "run", "--project", "{dossier}", "atlas-voix", "--installer-moteur", "{valeur}"]
+
+[[reglages]]
+cle = "voix"
+libelle = "Locuteur"
+aide = "Qui parle, pour la voix (TTS) choisie : les voix d'Apple installées dans la langue réglée, les voix Piper (les tiennes aussi, trouvées dans le cache Hugging Face), ou celles de Voxtral."
+defaut = "Aurélie (Enhanced)"
+commande_valeurs = ["uv", "run", "--project", "{dossier}", "atlas-voix", "--voix-liste"]
+commande_installer = ["uv", "run", "--project", "{dossier}", "atlas-voix", "--installer-voix", "{valeur}"]
+commande_supprimer = ["uv", "run", "--project", "{dossier}", "atlas-voix", "--supprimer-voix", "{valeur}"]
+libre = "ta voix Piper : son nom (en_US-lessac-medium) ou son dépôt Hugging Face, auteur/nom"
+
+[[reglages]]
+cle = "ton"
+libelle = "Ton"
+aide = "Avec Voxtral 3 en ligne seulement : la façon dont Atlas dit ses réponses. Les autres voix ne le connaissent pas."
+defaut = "naturel"
+valeurs = [
+  { valeur = "naturel", libelle = "Naturel" },
+  { valeur = "warm", libelle = "Chaleureux" },
+  { valeur = "happy", libelle = "Enjoué" },
+  { valeur = "playful", libelle = "Espiègle" },
+  { valeur = "excited", libelle = "Enthousiaste" },
+  { valeur = "calm", libelle = "Calme" },
+  { valeur = "confident", libelle = "Assuré" },
+  { valeur = "somber", libelle = "Grave" },
+]
+
+[[reglages]]
+cle = "micro"
+libelle = "Micro"
+aide = "Le micro du Mac qui t'écoute. Par défaut, celui du système ; s'il est muet, Atlas essaie celui du MacBook, et le dit si aucun ne donne de son."
+defaut = ""
+commande_valeurs = ["uv", "run", "--project", "{dossier}", "atlas-ecoute", "--micros-liste"]

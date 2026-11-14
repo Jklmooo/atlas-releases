@@ -1,0 +1,98 @@
+# Fiche d'entrée, posée dans ~/.atlas/entrees/ par l'installation depuis Réglages, Modules. Elle ne tourne pas avec la
+# Conversation (même groupe « voix ») : en allumer une éteint l'autre.
+nom = "Agent vocal"
+description = "Atlas à la voix par l'agent vocal de Mistral : dis « Hey Jarvis », puis parle ; il entend, réfléchit et répond lui-même, avec les outils d'Atlas, et tu peux lui couper la parole. La session se ferme après un silence. Ta voix part chez Mistral pendant la session."
+genre = "personne"          # ce qu'elle dit vaut une demande de la personne
+micro = true                # elle prend le micro : le bouton micro du réacteur l'allume ou l'éteint
+vocabulaire = true          # les mots qu'Atlas connaît : l'oreille de Mistral les préfère (`context_bias`)
+cles = ["mistral"]          # la clé Mistral d'Atlas, passée par le cœur
+peut = ["porte"]            # les outils d'Atlas par sa porte MCP, sur ce Mac, avec les droits de sa fiche
+seule = "voix"
+commande = "uv"
+arguments = ["run", "--project", "{dossier}", "atlas-agent-vocal"]
+
+[[reglages]]
+cle = "cerveau"
+libelle = "Cerveau"
+aide = "Le modèle de Mistral qui réfléchit et appelle les outils. Small répond le plus vite ; Medium se trompe moins sur les outils."
+defaut = "mistral-small-latest"
+valeurs = [
+  { valeur = "mistral-small-latest", libelle = "Mistral Small" },
+  { valeur = "mistral-medium-latest", libelle = "Mistral Medium" },
+  { valeur = "mistral-large-latest", libelle = "Mistral Large" },
+]
+
+[[reglages]]
+cle = "voix"
+libelle = "Locuteur"
+aide = "La voix française de Voxtral TTS 3 qui répond."
+defaut = "voice_592"
+valeurs = [
+  { valeur = "voice_592", libelle = "Marie" },
+  { valeur = "voice_589", libelle = "Léa" },
+  { valeur = "voice_3137", libelle = "Manon" },
+  { valeur = "voice_3141", libelle = "Camille" },
+]
+
+[[reglages]]
+cle = "fin"
+libelle = "Fin de ta phrase"
+aide = "Le silence après lequel l'agent répond. 500 ms (Mistral) ne coupe pas les phrases ; 300 ms répond plus tôt, mais coupe parfois une phrase en deux."
+defaut = "500"
+valeurs = [
+  { valeur = "500", libelle = "500 ms (recommandé)" },
+  { valeur = "300", libelle = "300 ms (plus rapide)" },
+]
+
+[[reglages]]
+cle = "silence"
+libelle = "Fin de la session"
+aide = "Après ce silence, l'agent demande si tu es toujours là, puis ferme la session : il faudra redire « Hey Jarvis »."
+defaut = "10"
+valeurs = [
+  { valeur = "10", libelle = "10 secondes" },
+  { valeur = "20", libelle = "20 secondes" },
+  { valeur = "30", libelle = "30 secondes" },
+]
+
+[[reglages]]
+cle = "accueil"
+libelle = "À l'ouverture"
+aide = "Ce que l'agent dit quand la session s'ouvre, après « Hey Jarvis ». Sans rien, il écoute tout de suite."
+defaut = ""
+valeurs = [
+  { valeur = "", libelle = "Rien, il écoute" },
+  { valeur = "Oui ?", libelle = "« Oui ? »" },
+  { valeur = "Je t'écoute.", libelle = "« Je t'écoute. »" },
+]
+
+[[reglages]]
+cle = "coupure"
+libelle = "Lui couper la parole"
+aide = "Parler pendant qu'il parle l'arrête aussitôt. Sans, il finit sa phrase : utile si le haut-parleur le fait s'interrompre tout seul."
+defaut = "oui"
+valeurs = [
+  { valeur = "oui", libelle = "Oui" },
+  { valeur = "non", libelle = "Non" },
+]
+
+[[reglages]]
+cle = "recherche"
+libelle = "Recherche web"
+aide = "La recherche web de Mistral, faite chez Mistral : elle remplace celle d'Atlas pour l'agent vocal."
+defaut = "oui"
+valeurs = [
+  { valeur = "oui", libelle = "Oui" },
+  { valeur = "non", libelle = "Non" },
+]
+
+[[reglages]]
+cle = "oreille"
+libelle = "Réactivité de l'oreille"
+aide = "Le retard que l'oreille de Mistral s'accorde pour bien entendre. Plus court, elle suit ta voix de plus près mais se trompe un peu plus ; 240 ms est le réglage de Mistral."
+defaut = "240"
+valeurs = [
+  { valeur = "160", libelle = "160 ms (plus vive)" },
+  { valeur = "240", libelle = "240 ms (recommandé)" },
+  { valeur = "480", libelle = "480 ms (plus sûre)" },
+]

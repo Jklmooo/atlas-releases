@@ -1,56 +1,64 @@
-# Fiche du module « voix » : ce que le socle lit avant d'installer (J10). Un dépôt contient plusieurs modules, chacun
+# Fiche du module « voix » : ce que le socle lit avant d'installer. Un dépôt contient plusieurs modules, chacun
 # dans son dossier avec cette fiche.
 nom = "Voix"
-description = "Parle à Atlas à voix haute et entends ses réponses : écoute avec mot d'éveil, et voix."
-version = "0.9.0"
+description = "Parle avec Atlas à voix haute, sur ce Mac et depuis le téléphone : mot d'éveil, réponse à la voix, et tu peux lui couper la parole."
+version = "0.13.5"
 socle = ">=0.1.2"           # version d'Atlas demandée : la première qui installe les paquets compilés et les options
-plateformes = ["macos", "windows"]   # là où le module marche (pyproject.toml : openwakeword n'a pas de paquet Linux) ; Linux au J12
+plateformes = ["macos", "windows"]   # là où le module marche (pyproject.toml : openwakeword n'a pas de paquet Linux) ; Linux reste à faire
 programmes = ["uv"]         # Atlas le télécharge (avec ton accord) s'il manque ; `say` et `afplay` seulement pour le moteur Mac
-preparation = ["uv", "sync", "--project", "{dossier}", "--frozen", "--no-dev", "{options}"]   # lancé une fois le module copié : prépare son Python, avec les moteurs cochés
-telechargements = ["l'écoute (mot d'éveil et micro, 230 Mo)", "le modèle du mot d'éveil « Hey Jarvis » (10 Mo)"]   # dit avant l'installation, en plus de uv
+preparation = ["uv", "sync", "--project", "{dossier}", "--frozen", "--no-dev", "{options}"]   # lancé une fois le module copié : prépare son Python, avec les moteurs déjà choisis
+telechargements = ["la conversation (mot d'éveil, Whisper, Pipecat, 580 Mo)", "le modèle du mot d'éveil « Hey Jarvis » (10 Mo)"]   # dit avant l'installation, en plus de uv
 etapes = [["uv", "run", "--project", "{dossier}", "atlas-ecoute", "--telecharger-eveil"]]   # lancées après la préparation
 
-# Les fiches que le cœur lit : une entrée (Écoute) et une sortie (Voix), activées et réglées séparément.
-# Le Python et ses paquets vivent dans l'environnement `uv` de ce dossier.
+# Deux fiches, une seule allumée à la fois (groupe « voix ») : la Conversation, entrée et sortie à la fois (elle envoie
+# la demande et dit la réponse), Mac et téléphone ; l'Agent vocal, où l'agent vocal de Mistral tient la fiche d'Atlas
+# avec ses outils, par la porte MCP. Le Python et ses paquets vivent dans l'environnement `uv` de ce dossier.
 [[fiches]]
-fichier = "fiches/ecoute.toml"
+fichier = "fiches/conversation.toml"
 dossier = "entrees"
-[[fiches]]
-fichier = "fiches/voix.toml"
-dossier = "sorties"
 
-# Les moteurs, cochés à l'installation et changeables ensuite sur la fiche du module. Les tailles sont ce que chacun
-# ajoute sur le disque (mesuré le 07/11/2026) ; Parakeet et Voxtral partagent MLX, ensemble ils prennent moins.
+[[fiches]]
+fichier = "fiches/agent_vocal.toml"
+dossier = "entrees"
+
+# Les moteurs hors de la base, sans case à cocher : le module installe celui qu'on choisit dans la liste d'un réglage
+# (oreille, bouche) et l'écrit dans le choix gardé du cœur, qui le remet aux mises à jour. Tailles mesurées le 07/11/2026.
 [[options]]
-id = "whisper"
-nom = "Whisper"
-description = "transcription de ta voix, sur Mac et Windows"
-taille = "60 Mo"
-coche = true
-arguments = ["--extra", "whisper"]
+id = "whisper-mlx"
+nom = "Whisper MLX"
+taille = "380 Mo"
+plateformes = ["macos"]
+cachee = true
+arguments = ["--extra", "whisper-mlx"]
 
 [[options]]
 id = "parakeet"
 nom = "Parakeet"
-description = "transcription bien plus rapide, sur un Mac à puce Apple"
 taille = "390 Mo"
 plateformes = ["macos"]
+cachee = true
 arguments = ["--extra", "parakeet"]
 
 [[options]]
 id = "piper"
 nom = "Piper"
-description = "voix locales, sur Mac et Windows"
 taille = "50 Mo"
-coche = true
+cachee = true
 arguments = ["--extra", "piper"]
+
+[[options]]
+id = "kokoro"
+nom = "Kokoro"
+taille = "20 Mo"
+cachee = true
+arguments = ["--extra", "kokoro"]
 
 [[options]]
 id = "voxtral"
 nom = "Voxtral"
-description = "voix de Mistral, plus naturelles et plus lentes, sur un Mac à puce Apple"
 taille = "410 Mo"
 plateformes = ["macos"]
+cachee = true
 arguments = ["--extra", "voxtral"]
 
 # La version publiée n'a pas le code : scripts/publier.sh lance construire.sh, qui compile le code du module (Cython)

@@ -13,6 +13,9 @@ Un module apporte une ou plusieurs **fiches**, chacune d'un de ces deux rôles :
   au micro), ou une simple notification (une sonnette, un capteur).
 - **Sortie** : elle reçoit les réponses d'Atlas (une voix qui les lit, une bulle qui les affiche).
 
+Une entrée peut être aussi une sortie (`sortie = true`) : un seul programme envoie la demande et reçoit la réponse
+phrase par phrase, comme la voix, qui écoute et parle sans que l'une coupe l'autre.
+
 Au-delà de son rôle, une fiche peut **demander à voir** davantage (l'état d'Atlas, chaque demande) et **demander à
 faire** quelques gestes (couper la voix, remettre la fenêtre devant). Le cœur ne lui envoie que ce qu'elle a demandé
 et refuse tout autre geste. La personne lit tout cela en clair avant d'installer (section 4).
@@ -69,6 +72,8 @@ fiche que la nouvelle version n'a plus disparaît.
 | `micro` | entrée qui prend le micro : le bouton micro du réacteur l'allume ou l'éteint |
 | `vocabulaire` | entrée qui veut les noms qu'Atlas connaît, pour mieux les reconnaître |
 | `parle` | sortie qui parle : le bouton haut-parleur du réacteur l'allume ou l'éteint |
+| `sortie` | entrée qui est aussi une sortie : elle reçoit aussi tout ce qu'une sortie reçoit. Avec `micro` et `parle`, les boutons du réacteur ne l'arrêtent plus : ils lui disent `{"micro": false}` ou `{"voix": false}`, et elle s'arrête quand les deux sont fermés |
+| `cles` | les clés de services en ligne qu'elle utilise : `["mistral"]`. Le cœur lui passe la clé qu'il garde pour le modèle de ce service (`ATLAS_CLE_MISTRAL`) ; le module ne lit jamais `secrets.toml` |
 | `recoit` | ce qu'elle demande à voir en plus de son rôle : `"etat"`, `"demande"` (section 5) |
 | `peut` | les gestes qu'elle demande à faire : `"couper"`, `"montrer"` (section 6) |
 | `[[reglages]]` | ses réglages (section 3) |
@@ -127,6 +132,8 @@ Le catalogue montre, pour chaque module, la liste de ce qu'il pourra faire, tir�
 | `recoit = ["demande"]` | voir chacune de tes demandes |
 | `peut = ["couper"]` | couper la voix d'Atlas |
 | `peut = ["montrer"]` | remettre la fenêtre d'Atlas devant toi |
+| `sortie = true` sur une entrée | recevoir chaque réponse d'Atlas |
+| `cles = ["mistral"]` | utiliser ta clé Mistral, gardée par Atlas |
 
 La fiche d'un module installé redit la même liste. Une mise à jour qui demande davantage le dit avant qu'on la lance
 (« Avec elle, il pourra aussi : … »). Ne demande que ce dont le module a besoin.
@@ -149,6 +156,7 @@ Pense à vider ton tampon après chaque ligne (`flush`) : sinon le cœur ne reç
 | `{"capte": true, "niveau": 0.4}` / `{"capte": false}` | entrée | elle capte, d'où l'état « écoute » ; une entrée `personne` qui capte fait taire les sorties. `niveau` de 0 à 1, facultatif |
 | `{"emet": true}` / `{"emet": false}` | sortie | elle émet, d'où l'état « parole » ; les entrées le reçoivent |
 | `{"emet": true, "niveau": 0.6}` | sortie | le volume de ce qu'elle joue, de 0 à 1, quelques fois par seconde |
+| `{"entendu": "…", "reponse": 12}` | sortie qui a été coupée en pleine réponse | ce qui a été dit de la réponse `12` avant la coupure. La conversation ne garde que cela, suivi de « (interrompu) » ; si la réponse s'écrit encore, le modèle s'arrête |
 | `{"geste": "couper"}` | fiche avec `peut = ["couper"]` | la voix d'Atlas se tait, comme quand une demande arrive |
 | `{"geste": "montrer"}` | fiche avec `peut = ["montrer"]` | la fenêtre d'Atlas revient devant la personne |
 | `{"erreur": "…"}` | toutes | pourquoi le module s'arrête, montré dans Réglages, Modules |
@@ -159,8 +167,9 @@ Un geste que la fiche n'a pas déclaré est refusé, et le refus est noté au jo
 
 | Message | Qui | Sens |
 |---|---|---|
-| `{"phrase": "…"}` | sortie | une phrase de la réponse, dès que le modèle l'a écrite : une voix parle avant la fin. Une réponse qui ne s'écrit pas au fil de l'eau (un outil, un accord) arrive en une seule phrase. Une erreur ne se dit pas |
-| `{"fin": true}` | sortie | la réponse est complète |
+| `{"phrase": "…", "reponse": 12}` | sortie | une phrase de la réponse numéro `12`, dès qu'elle est finie : une voix parle avant la fin. Sans Markdown, et jamais deux fois la même dans une réponse. Une réponse qui ne s'écrit pas au fil de l'eau (un outil, un accord) arrive d'un coup, phrase par phrase. Une erreur ne se dit pas |
+| `{"fin": true, "reponse": 12}` | sortie | la réponse est complète |
+| `{"micro": true, "voix": false}` | entrée avec `sortie` | les boutons micro et voix du réacteur, au lancement puis à chaque changement : micro fermé, elle libère le micro ; voix fermée, elle se tait |
 | `{"couper": true}` | sortie | une demande arrive, ou une entrée capte : se taire, et oublier les phrases en attente |
 | `{"texte": "…", "erreur": false}` | entrée | la réponse entière à la demande que cette entrée a faite |
 | `{"sortie": true}` / `{"sortie": false}` | entrée | une sortie émet ou s'arrête (une écoute peut devenir plus exigeante pendant qu'Atlas parle) |
